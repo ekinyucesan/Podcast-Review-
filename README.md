@@ -1,23 +1,51 @@
-# Podcast-Review-
-Podcast Ratings and Categories Analysis
+# Economic and Structural Determinants of Aquaculture Production: A Cross-Country Analysis
 
-This project examines how podcast topics influence listener satisfaction. Using over two million reviews from the Podcast Reviews Dataset (Kaggle)
-and a categories.json taxonomy exported from ListenNotes, the analysis investigates whether certain podcast categories receive higher ratings or more positive review sentiment.
+Abstract
+This study analyzes cross-country differences in aquaculture production using a panel dataset covering the period 2013–2022. Data from OECD, Eurostat, and FAO sources are combined to construct a country–year dataset including aquaculture output, GDP, employment, trade, patents, and environmental indicators. The main objective is to examine whether countries with higher GDP tend to exhibit higher aquaculture production, reflecting greater economic capacity to invest in aquaculture activities. Exploratory data analysis is used to identify patterns and relationships in the data prior to further statistical analysis.
+1.Introduction
+Aquaculture has become an increasingly important source of global food production as capture fisheries face biological and environmental constraints. Understanding the factors associated with aquaculture production is therefore important for both economic and policy analysis. This study focuses on the role of macroeconomic capacity, particularly GDP, in explaining cross-country differences in aquaculture output. Rather than making causal claims, the analysis aims to identify systematic relationships consistent with economic intuition using observational data.
 
-Research Question:
--Do the production characteristics of podcasts—such as their category, release frequency, and country of origin—affect how positively listeners rate or review them?
+2. Data and Analytical Framework
+2.1 Data Sources
+Data were collected from publicly available international databases. Aquaculture production data were obtained from the OECD Data Explorer and measured in live weight (tonnes). Macroeconomic indicators such as GDP and population were sourced from OECD datasets. Fisheries trade data (imports and exports) and fleet and catch statistics were obtained from Eurostat. Information on fishing- and aquaculture-related patents was used as a proxy for technological activity, while FAO fisheries membership and coastal access were included as binary indicators.
 
-I'm planing to use these two datasets from Kaggle:
-1)All Podcast Episodes Published in December 2017 (Kaggle) — meta data of podcast episodes from December 2017 (~121k podcasts, ~881k episodes)
-2) Reviews (Kaggle) — ~2 million reviews for ~100k podcasts (review text, ratings, etc.).
+2.2 Data Preparation and Panel Construction
+All datasets were harmonized at the country–year level for the period 2013–2022. Country identifiers were standardized using ISO3 country codes, and only countries with sufficient data coverage were retained. Extensive data cleaning was performed to handle missing values, inconsistent formats, and reporting flags. Variables with unclear source traceability, such as industry productivity, were excluded to ensure transparency and reproducibility. The final dataset represents a well-documented panel suitable for descriptive and regression-based analysis.
 
-These two datasets are complementary for this project. While the first dataset is providing Production mostly topics, countries, languages, release behavior second dataset will support it with reviews,ratings and sentiments.
+2.3 Tools Used
+The analysis was conducted using Python. Data cleaning and merging were performed with the pandas library, while numerical operations relied on NumPy. Visualization and exploratory analysis were supported by standard plotting libraries. The workflow was designed to ensure transparency and reproducibility.
 
-Here are some subquestions to analyze in this project:
+3. Descriptive Exploration of the Data
+Exploratory data analysis was conducted to examine distributions and relationships among key variables. Initial visualizations suggest a positive association between GDP and total aquaculture production, consistent with the proposed hypothesis. Similar patterns are observed for aquaculture employment and fisheries exports. These descriptive findings provide motivation for further statistical analysis while remaining exploratory in nature.
+3.1 Data Visualization
+Correlation heatmaps were used to examine relationships among key fisheries, aquaculture, economic, and innovation variables. The heatmap of selected fisheries-related features indicates that aquaculture employment is moderately associated with aquaculture production, while variables related to capture fisheries such as fleet size and fish catches show weaker relationships with aquaculture output.
+A broader correlation heatmap including all numeric variables highlights strong associations between macroeconomic indicators such as GDP and total patent counts, as well as between GDP and fisheries trade variables. In contrast, fishing-specific patent activity appears less strongly linked to overall economic size.
+GDP trends across countries over time were visualized using a multi-line time-series plot. The visualization shows substantial differences in economic scale and growth patterns across countries, with a small number of countries consistently dominating global GDP levels.
+Finally, a bar chart comparing total patents and fishing-related patents for the top patent-producing countries reveals that fisheries-related innovation constitutes a relatively small share of overall patent activity, even among technologically advanced economies. A logarithmic scale was used to enable clearer comparison across countries with large differences in patent volumes.
 
-Do some podcast categories receive higher average listener ratings?
-Are certain genres (e.g., Education, Technology) more likely to have positive review sentiment?
-Is review text length or emotional tone correlated with genre?
+
+Machine Learning Analysis
+To complement the hypothesis testing, supervised machine learning was applied to evaluate how well macroeconomic, sectoral, and environmental variables jointly explain aquaculture production across countries. The aim of this analysis was predictive and exploratory rather than causal, focusing on identifying key drivers of production levels.
+Data Preparation and Missing Values
+The dataset contained substantial missing values in several variables. Initial row-wise deletion of missing observations resulted in an extremely small sample size, rendering the analysis unreliable. To address this issue, a column-wise missing data strategy was adopted. Variables with excessively high proportions of missing values were excluded, while variables with relatively low missingness were retained. This approach preserved a sufficient number of observations while ensuring model stability. After this process, the final machine learning dataset consisted of 360 observations.
+Aquaculture production, measured in total tonnes, was used as the dependent variable. Due to strong right-skewness, the variable was log-transformed to stabilize variance and reduce the influence of extreme values.
+Model Specifications
+Two linear regression models were estimated. The first, a full model, included GDP, population, fish catches, fisheries exports, fisheries imports, and exposure to extreme temperatures. This model achieved an R² of approximately 0.54, indicating that over half of the variation in aquaculture production is explained by the included variables. For cross-country economic data, this level of explanatory power is considered strong.
+To assess robustness and address multicollinearity, an alternative specification excluding population was also estimated. Population was removed due to its very high correlation with GDP. The alternative model achieved a lower but still meaningful R² of approximately 0.40, confirming that population plays a substantial role in explaining production levels.
+Interpretation of Results
+In the full model, population emerged as the strongest predictor, reflecting a clear scale effect: countries with larger populations tend to produce more aquaculture output. GDP exhibited a negative coefficient in this specification; however, this result is driven by multicollinearity with population and should be interpreted conditionally rather than independently. It does not imply that higher GDP reduces aquaculture production, but rather that GDP adds limited explanatory power once demographic and sectoral factors are controlled for.
+In the alternative model without population, GDP became positive but economically small, while fisheries exports emerged as the most influential variable. This suggests that aquaculture production is more closely linked to fisheries-sector orientation and trade activity than to income level alone. Environmental exposure to extreme temperatures showed a moderate association, likely capturing regional patterns rather than direct causal effects.
+Conclusion
+This study examined the relationship between macroeconomic conditions and aquaculture production across countries by combining hypothesis testing and machine learning approaches. The central hypothesis proposed that countries with higher GDP tend to have higher aquaculture production due to greater investment capacity and economic resources.
+The empirical analysis shows that this relationship is more nuanced than a simple positive association. While GDP displays a positive relationship with aquaculture production in simpler model specifications, its independent effect weakens once demographic and sector-specific variables are introduced. In particular, population emerges as the most influential factor, indicating that aquaculture production is strongly driven by scale effects. Countries with larger populations tend to exhibit substantially higher aquaculture output, regardless of income level.
+The machine learning results reinforce this conclusion. The full linear regression model explains approximately 54% of the variation in aquaculture production, highlighting the importance of demographic size, fisheries trade, and sectoral characteristics. An alternative model excluding population shows reduced explanatory power, confirming the dominant role of scale. GDP, while relevant, appears to operate conditionally rather than as a primary driver.
+Overall, the findings suggest that aquaculture production is shaped more by population size and fisheries-sector structure than by economic capacity alone. Rather than rejecting the initial hypothesis, the results provide partial support by demonstrating that GDP matters primarily through its interaction with demographic and industry-related factors.
+Limitations and Future Work
+This study is subject to several limitations. First, the analysis relies on country-level aggregate data, which may mask important regional and local differences in aquaculture practices. Within-country variation in infrastructure, regulation, and environmental conditions cannot be captured in this framework.
+Second, missing data posed a significant challenge. Although a column-wise approach to handling missing values preserved sample size and ensured model stability, excluding variables with high missingness may have omitted potentially relevant explanatory factors. As a result, the models may not fully capture technological or institutional dimensions of aquaculture development.
+Third, the machine learning analysis focuses on linear relationships. While linear models offer interpretability and are appropriate for hypothesis-driven analysis, they may fail to capture complex non-linear dynamics inherent in environmental and economic systems.
+Future research could address these limitations in several ways. Incorporating regional or subnational data would allow for more granular analysis of aquaculture production. Improved data availability on technological adoption, environmental regulation, and sustainability practices could enhance explanatory power. Additionally, extending the analysis to non-linear or panel-based modeling approaches could provide deeper insights into dynamic and long-term relationships.
+Despite these limitations, the study provides a robust and methodologically sound examination of the drivers of aquaculture production and highlights the importance of scale and sectoral structure in shaping outcomes.
 
 Author
 Ekin Yücesan
